@@ -1,4 +1,4 @@
-;  unzx0_8088.S - ZX0 decompressor for 8088 - 82 bytes - NASM
+;  unzx0_8088.S - ZX0 decompressor for 8088 - 79 bytes - NASM
 ;
 ;  inputs:
 ;  * ds:si: start of compressed data
@@ -59,9 +59,8 @@ zx0_decompress:
         jnc     .literals       ; if 0: go copy literals
 
 .get_offset:
-        mov     cx,0feh         ; initialize value to FEh
-        call    .elias_loop     ; read high byte of match offset
-        inc     cl              ; obtain negative offset high byte
+        call    .get_elias      ; read high byte of match offset
+        neg     cl              ; obtain negative offset high byte
         je      .done           ; exit if EOD marker
         
         mov     dh,cl           ; transfer negative high byte into dh
